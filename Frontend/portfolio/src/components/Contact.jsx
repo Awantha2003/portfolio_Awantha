@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   MailIcon,
@@ -10,6 +10,7 @@ import {
   InstagramIcon,
   SendIcon
 } from 'lucide-react';
+import { submitContactForm } from '../api/contactAPI';
 
 // Contact info item component
 const ContactInfoItem = ({ icon, title, value, href = '#' }) => {
@@ -46,6 +47,25 @@ const SocialButton = ({ icon, href = '#', color }) => {
 };
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [status, setStatus] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('Sending...');
+    const res = await submitContactForm(formData);
+    if (res.success) {
+      setStatus('✅ Message sent!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } else {
+      setStatus('❌ Failed to send. Try again.');
+    }
+  };
+
   return (
     <section id="contact" className="relative py-20 bg-gray-900">
       {/* Background elements */}
@@ -80,14 +100,14 @@ const Contact = () => {
               <ContactInfoItem
                 icon={<MailIcon size={20} className="text-blue-400" />}
                 title="Email"
-                value="john@example.com"
-                href="mailto:john@example.com"
+                value="awanthaimesh123@gmail.com"
+                href="awanthaimesh123@gmail.com"
               />
               <ContactInfoItem
                 icon={<PhoneIcon size={20} className="text-blue-400" />}
                 title="Phone"
                 value="+94 123 456 789"
-                href="tel:+94123456789"
+                href="tel:+94704949394"
               />
               <ContactInfoItem
                 icon={<MapPinIcon size={20} className="text-blue-400" />}
@@ -123,7 +143,7 @@ const Contact = () => {
           >
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
               <h3 className="text-2xl font-bold mb-6">Send Message</h3>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">
@@ -132,6 +152,8 @@ const Contact = () => {
                     <input
                       type="text"
                       id="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                       placeholder="Your name"
                     />
@@ -143,6 +165,8 @@ const Contact = () => {
                     <input
                       type="email"
                       id="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                       placeholder="Your email"
                     />
@@ -156,6 +180,8 @@ const Contact = () => {
                   <input
                     type="text"
                     id="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                     placeholder="Subject"
                   />
@@ -168,6 +194,8 @@ const Contact = () => {
                   <textarea
                     id="message"
                     rows="5"
+                    value={formData.message}
+                    onChange={handleChange}
                     className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white resize-none"
                     placeholder="Your message"
                   ></textarea>
@@ -176,11 +204,13 @@ const Contact = () => {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  type="submit"
                   className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-blue-500/25 transition-all"
                 >
                   Send Message
                   <SendIcon size={18} />
                 </motion.button>
+                {status && <p className="mt-4 text-sm text-gray-400">{status}</p>}
               </form>
             </div>
           </motion.div>

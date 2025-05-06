@@ -14,7 +14,7 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">About Me</h2>
           <div className="w-20 h-1 bg-blue-500 mx-auto"></div>
         </motion.div>
 
@@ -32,8 +32,8 @@ const About = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[250px] h-[250px] md:w-[320px] md:h-[320px] rounded-full overflow-hidden border-4 border-gray-800">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
-                    alt="Profile"
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
+                    alt="Awantha Imesh"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -53,25 +53,25 @@ const About = () => {
               Full Stack Developer & UI/UX Designer
             </h3>
             <p className="text-gray-300 mb-6">
-              I'm a passionate developer and designer with a strong focus on creating beautiful,
+              I'm Awantha Imesh, a passionate developer and designer with a strong focus on creating beautiful,
               functional websites and applications. With expertise in both front-end and back-end
               technologies, I bring ideas to life with clean code and stunning designs.
             </p>
             <div className="mb-6">
               <h4 className="text-xl font-semibold mb-3 text-gray-100">Education</h4>
               <div className="relative pl-8 before:content-[''] before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-blue-500 before:rounded-full before:z-10 ml-2 before:shadow-[0_0_0_4px_rgba(59,130,246,0.3)]">
-                <h5 className="text-lg font-medium text-gray-200">BSc in Computer Science</h5>
-                <p className="text-gray-400">SLIIT - 2023-2027</p>
+                <h5 className="text-lg font-medium text-gray-200">BSc in Software Engineering</h5>
+                <p className="text-gray-400">SLIIT - 2023–2027</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <h4 className="font-semibold text-gray-100">Name:</h4>
-                <p className="text-gray-400">John Doe</p>
+                <p className="text-gray-400">Awantha Imesh</p>
               </div>
               <div>
                 <h4 className="font-semibold text-gray-100">Email:</h4>
-                <p className="text-gray-400">john@example.com</p>
+                <p className="text-gray-400">awanthaimesh@gmail.com</p>
               </div>
               <div>
                 <h4 className="font-semibold text-gray-100">Location:</h4>

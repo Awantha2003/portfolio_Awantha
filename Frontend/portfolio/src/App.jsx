@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import Hero from './components/Hero';
@@ -7,9 +8,30 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Education from './components/Education';
 import Experience from './components/Experience';
+import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import StackedCards from './components/StackedCards';
 import WhySmooth from './components/WhySmooth';
+import AdminPanel from './pages/AdminPanel';
+
+const Home = () => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 1 }}
+  >
+    <Hero />
+    <WhySmooth />
+    <StackedCards />
+    <About />
+    <Skills />
+    <Projects />
+    <Education />
+    <Experience />
+    <Testimonials />
+    <Contact />
+  </motion.div>
+);
 
 const App = () => {
   useEffect(() => {
@@ -44,23 +66,14 @@ const App = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-black text-white overflow-x-hidden">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        <Hero />
-        <WhySmooth />
-        <StackedCards />
-        <About />
-        <Skills />
-        <Projects />
-        <Education />
-        <Experience />
-        <Contact />
-      </motion.div>
-    </div>
+    <Router>
+      <div className="w-full min-h-screen bg-black text-white overflow-x-hidden">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

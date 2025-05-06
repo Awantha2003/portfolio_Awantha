@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { BriefcaseIcon, CalendarIcon } from 'lucide-react';
 
-// Experience card component
 const ExperienceCard = ({ title, company, period, description, skills, delay }) => {
   return (
     <motion.div
@@ -28,10 +27,7 @@ const ExperienceCard = ({ title, company, period, description, skills, delay }) 
       <p className="text-gray-300 mb-5">{description}</p>
       <div className="flex flex-wrap gap-2">
         {skills.map((skill, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 bg-gray-700/50 rounded-full text-sm text-blue-400"
-          >
+          <span key={index} className="px-3 py-1 bg-gray-700/50 rounded-full text-sm text-blue-400">
             {skill}
           </span>
         ))}
@@ -43,26 +39,25 @@ const ExperienceCard = ({ title, company, period, description, skills, delay }) 
 const Experience = () => {
   const experiences = [
     {
-      title: 'Junior Frontend Developer',
-      company: 'TechSolutions Inc.',
-      period: 'Jan 2023 - Present',
+      title: 'Software Engineering Intern',
+      company: 'SLIIT / Local Software Company',
+      period: 'Jan 2025 - Present',
       description:
-        'Working on developing responsive web applications using React and collaborating with the design team to implement UI/UX improvements.',
-      skills: ['React', 'JavaScript', 'UI/UX', 'Tailwind CSS'],
+        'Assisting in the development of web applications using the MERN stack. Collaborating on frontend design and backend APIs while following agile practices.',
+      skills: ['Java', 'MongoDB', 'React.js', 'Node.js', 'Express.js', 'UI/UX'],
     },
     {
-      title: 'Web Development Intern',
-      company: 'Digital Innovations',
-      period: 'Jun 2022 - Dec 2022',
+      title: 'Data Science Intern (Virtual)',
+      company: 'CodSoft',
+      period: 'Nov 2024 - Dec 2024',
       description:
-        'Assisted in developing and maintaining company websites and web applications. Worked on implementing responsive designs and optimizing performance.',
-      skills: ['HTML/CSS', 'JavaScript', 'WordPress', 'PHP'],
+        'Worked on data analysis and machine learning mini-projects. Gained practical experience in data preprocessing, visualization, and using tools like pandas and scikit-learn.',
+      skills: ['Python', 'Pandas', 'Machine Learning', 'Data Analysis'],
     },
   ];
 
   return (
     <section id="experience" className="relative py-20 bg-gray-900">
-      {/* Background elements */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[100px]" />
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
