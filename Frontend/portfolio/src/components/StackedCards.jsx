@@ -112,7 +112,7 @@ const features = [
   }
 ];
 
-// Geometric SVG component
+// GeometricSVG, Particle, Card, and FeatureCard components remain unchanged
 const GeometricSVG = ({ color, isActive }) => {
   const svgRef = useRef(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -200,7 +200,6 @@ const GeometricSVG = ({ color, isActive }) => {
   );
 };
 
-// Particle component
 const Particle = ({ delay = 0, type = 'circle' }) => {
   const size = Math.random() * 3 + 1;
   const duration = Math.random() * 10 + 10;
@@ -264,15 +263,14 @@ const Particle = ({ delay = 0, type = 'circle' }) => {
   );
 };
 
-// Card component for Section 1
-const Card = React.memo(({ card, progress, isActive, index, totalCards }) => {
-  // Adjusted transformations to ensure visibility of all cards
+const Card = React.memo(({ card, progress, isActive, index, totalCards, isHorizontal }) => {
   const scale = useTransform(progress, [0, 0.5, 1], [0.85, 1, 0.85]);
-  const opacity = useTransform(progress, [0, 0.5, 1], [0.4, 1, 0.4]); // Ensure non-active cards are partially visible
+  const opacity = useTransform(progress, [0, 0.5, 1], [0.4, 1, 0.4]);
   const blur = useTransform(progress, [0, 0.5, 1], [2, 0, 2]);
   const y = useTransform(progress, [0, 0.5, 1], [50, 0, -50]);
+  const x = isHorizontal ? useTransform(progress, [0, 0.5, 1], [50, 0, -50]) : 0;
   const rotateX = useTransform(progress, [0, 0.5, 1], [5, 0, -5]);
-  const zIndex = useTransform(progress, [0, 0.5, 1], [totalCards - index, totalCards + index, totalCards - index]); // Dynamic zIndex
+  const zIndex = useTransform(progress, [0, 0.5, 1], [totalCards - index, totalCards + index, totalCards - index]);
 
   const leftTextX = useTransform(progress, [0, 0.5, 1], [-70, 0, 70]);
   const leftTextOpacity = useTransform(progress, [0, 0.5, 1], [0, 1, 0]);
@@ -331,6 +329,7 @@ const Card = React.memo(({ card, progress, isActive, index, totalCards }) => {
         scale,
         opacity,
         y,
+        x,
         rotateX,
         filter: `blur(${blur.get()}px)`,
         zIndex
@@ -460,7 +459,6 @@ const Card = React.memo(({ card, progress, isActive, index, totalCards }) => {
   );
 });
 
-// Feature Card for Section 2
 const FeatureCard = ({ feature, index }) => {
   return (
     <motion.div
@@ -500,26 +498,33 @@ const FeatureCard = ({ feature, index }) => {
   );
 };
 
-// Main StackedCards component
 const StackedCards = () => {
   const containerRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndexVertical, setActiveIndexVertical] = useState(0);
+  const [activeIndexHorizontal, setActiveIndexHorizontal] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Adjusted progress mapping to ensure each card gets its turn
-  const progress = useTransform(scrollYProgress, [0, 1], [0, cards.length]);
+  const verticalProgress = useTransform(scrollYProgress, [0, 1], [0, cards.length / 2]);
+  const horizontalProgress = useTransform(scrollYProgress, [0, 1], [0, cards.length / 2]);
 
   useEffect(() => {
-    const unsubscribe = progress.onChange(value => {
+    const unsubscribeVertical = verticalProgress.onChange(value => {
       const newIndex = Math.floor(value);
-      setActiveIndex(Math.min(newIndex, cards.length - 1));
+      setActiveIndexVertical(Math.min(newIndex, Math.floor(cards.length / 2) - 1));
     });
-    return () => unsubscribe();
-  }, [progress]);
+    const unsubscribeHorizontal = horizontalProgress.onChange(value => {
+      const newIndex = Math.floor(value);
+      setActiveIndexHorizontal(Math.min(newIndex + Math.floor(cards.length / 2), cards.length - 1));
+    });
+    return () => {
+      unsubscribeVertical();
+      unsubscribeHorizontal();
+    };
+  }, [verticalProgress, horizontalProgress]);
 
   const titleX = useTransform(scrollYProgress, [0, 0.1], [-100, 0]);
   const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
@@ -538,17 +543,26 @@ const StackedCards = () => {
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
-      direction: 'vertical',
+      direction: 'vertical', // Vertical for the main scroll
+    });
+
+    const lenisHorizontal = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      direction: 'horizontal', // Horizontal for the right section
     });
 
     function raf(time) {
       lenis.raf(time);
+      lenisHorizontal.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
 
     return () => {
       lenis.destroy();
+      lenisHorizontal.destroy();
     };
   }, []);
 
@@ -576,7 +590,7 @@ const StackedCards = () => {
             white-space: nowrap;
             animation: typewriter 3s steps(40) 1s 1 normal both,
                       blink 0.75s step-end infinite;
-            border-right: 2px solid white;
+            border-right: 2x solid white;
           }
           @keyframes trail {
             0% { opacity: 0.5; transform: scale(0.5); }
@@ -612,13 +626,13 @@ const StackedCards = () => {
           </div>
         </motion.div>
 
-        <div ref={containerRef} className="container mx-auto px-4 min-h-[300vh]">
-          <div className="sticky top-0 h-screen flex items-center justify-center">
-            <div className="relative w-full max-w-4xl h-[60vh]">
-              {cards.map((card, i) => {
+        <div ref={containerRef} className="container mx-auto px-4 min-h-[300vh] flex">
+          <div className="w-1/2 h-screen sticky top-0 flex items-center">
+            <div className="relative w-full h-[60vh]">
+              {cards.slice(0, Math.floor(cards.length / 2)).map((card, i) => {
                 const cardProgress = useTransform(
                   scrollYProgress,
-                  [i / cards.length, (i + 1) / cards.length],
+                  [i / (cards.length / 2), (i + 1) / (cards.length / 2)],
                   [0, 1]
                 );
                 return (
@@ -626,9 +640,32 @@ const StackedCards = () => {
                     key={i}
                     card={card}
                     progress={cardProgress}
-                    isActive={i === activeIndex}
+                    isActive={i === activeIndexVertical}
                     index={i}
-                    totalCards={cards.length}
+                    totalCards={Math.floor(cards.length / 2)}
+                    isHorizontal={false}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="w-1/2 h-screen sticky top-0 flex items-center">
+            <div className="relative w-full h-[60vh] flex items-center">
+              {cards.slice(Math.floor(cards.length / 2)).map((card, i) => {
+                const cardProgress = useTransform(
+                  scrollYProgress,
+                  [i / (cards.length / 2), (i + 1) / (cards.length / 2)],
+                  [0, 1]
+                );
+                return (
+                  <Card
+                    key={i}
+                    card={card}
+                    progress={cardProgress}
+                    isActive={i === activeIndexHorizontal - Math.floor(cards.length / 2)}
+                    index={i}
+                    totalCards={Math.floor(cards.length / 2)}
+                    isHorizontal={true}
                   />
                 );
               })}
@@ -643,17 +680,17 @@ const StackedCards = () => {
                 key={i}
                 className="relative w-3 h-3"
                 animate={{
-                  scale: i === activeIndex ? 1.5 : 1,
+                  scale: i === activeIndexVertical || i === activeIndexHorizontal ? 1.5 : 1,
                 }}
               >
                 <motion.div
                   className="absolute inset-0 rounded-full"
-                  style={{ backgroundColor: i === activeIndex ? card.accentColor : '#ffffff' }}
+                  style={{ backgroundColor: (i === activeIndexVertical || i === activeIndexHorizontal) ? card.accentColor : '#ffffff' }}
                   animate={{
-                    opacity: i === activeIndex ? 1 : 0.3,
+                    opacity: (i === activeIndexVertical || i === activeIndexHorizontal) ? 1 : 0.3,
                   }}
                 />
-                {i === activeIndex && (
+                {(i === activeIndexVertical || i === activeIndexHorizontal) && (
                   <motion.div
                     className="absolute inset-0 rounded-full trail"
                     style={{ backgroundColor: card.accentColor }}

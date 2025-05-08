@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const AdminPanel = () => {
@@ -127,7 +128,20 @@ const AdminPanel = () => {
 
   return (
     <div className="p-10 bg-black text-white min-h-screen">
-      <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Admin Dashboard</h2>
+        <Link to="/video-admin">
+          <button className="relative bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold text-white overflow-hidden group">
+            <span className="relative z-10 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m-6 2V8a1 1 0 011-1h4a1 1 0 011 1v8a1 1 0 01-1 1h-4a1 1 0 01-1-1z"></path>
+              </svg>
+              Video Call
+            </span>
+            <span className="absolute inset-0 bg-purple-800 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></span>
+          </button>
+        </Link>
+      </div>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         <input
           type="text"

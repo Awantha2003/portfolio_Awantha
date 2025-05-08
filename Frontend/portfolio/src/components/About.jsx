@@ -32,7 +32,7 @@ const About = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[250px] h-[250px] md:w-[320px] md:h-[320px] rounded-full overflow-hidden border-4 border-gray-800">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
+                    src="/my4.jpg"
                     alt="Awantha Imesh"
                     className="w-full h-full object-cover"
                   />

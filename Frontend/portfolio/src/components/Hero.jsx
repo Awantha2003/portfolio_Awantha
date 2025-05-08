@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowDown, Briefcase, Code, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Kinetic Typography Component with enhanced centering
 const KineticText = ({ text, className = "" }) => {
@@ -89,6 +90,56 @@ const NoiseEffect = () => {
   );
 };
 
+// Image Carousel Component
+const ImageCarousel = () => {
+  const images = [
+    '/my1.jpg',
+    '/my2.jpg',
+    '/my3.jpg',
+    '/my4.jpg',
+    '/my5.jpg',
+    '/my6.jpg',
+  ];
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const handleImageError = () => {
+    setIsError(true);
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden opacity-30 bg-white">
+      {isError ? (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <span className="text-white/50">Failed to load images</span>
+        </div>
+      ) : (
+        images.map((src, index) => (
+          <motion.img
+            key={src}
+            src={src}
+            alt={`Background ${index + 1}`}
+            className="absolute inset-0 w-full h-full object-cover filter blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentImage ? 1 : 0 }}
+            transition={{ duration: 1, ease: 'easeInOut' }}
+            onError={handleImageError}
+          />
+        ))
+      )}
+      {/* Overlay to blend images with background */}
+      <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+    </div>
+  );
+};
+
 // Main Hero Component
 const Hero = () => {
   const { scrollYProgress } = useScroll();
@@ -98,6 +149,7 @@ const Hero = () => {
   const rotate = useTransform(scrollYProgress, [0, 0.5], [0, -10]);
   
   const [isRevealed, setIsRevealed] = useState(false);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -117,6 +169,7 @@ const Hero = () => {
         transition={{ duration: 2 }}
       />
       
+      <ImageCarousel />
       <GridBackground />
       <NoiseEffect />
       
@@ -315,6 +368,24 @@ const Hero = () => {
                   <span className="relative flex items-center justify-center">
                     CONTACT ME
                     <Code className="ml-2" size={16} />
+                  </span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/video-customer')}
+                  className="px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-full hover:bg-blue-700 transition-all group overflow-hidden relative"
+                >
+                  <motion.span 
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "100%" }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="relative flex items-center justify-center">
+                    JOIN VIDEO CALL
+                    <span className="ml-2">🎥</span>
                   </span>
                 </motion.button>
               </motion.div>

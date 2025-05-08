@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import Hero from './components/Hero';
@@ -13,6 +13,8 @@ import Contact from './components/Contact';
 import StackedCards from './components/StackedCards';
 import WhySmooth from './components/WhySmooth';
 import AdminPanel from './pages/AdminPanel';
+
+import VideoRoom from './components/VideoChat';
 
 const Home = () => (
   <motion.div
@@ -30,6 +32,15 @@ const Home = () => (
     <Experience />
     <Testimonials />
     <Contact />
+
+    {/* ✅ Call Button for Testing */}
+    <div className="text-center my-10">
+      <Link to="/video-customer">
+        <button className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
+          Start Video Call (Customer)
+        </button>
+      </Link>
+    </div>
   </motion.div>
 );
 
@@ -71,6 +82,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminPanel />} />
+
+          {/* ✅ Video Call Routes */}
+          <Route path="/video-customer" element={<VideoRoom role="customer" />} />
+          <Route path="/video-admin" element={<VideoRoom role="admin" />} />
         </Routes>
       </div>
     </Router>
