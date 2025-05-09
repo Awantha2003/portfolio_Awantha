@@ -13,8 +13,8 @@ import Contact from './components/Contact';
 import StackedCards from './components/StackedCards';
 import WhySmooth from './components/WhySmooth';
 import AdminPanel from './pages/AdminPanel';
-
 import VideoRoom from './components/VideoChat';
+import VoiceAssistant from './components/VoiceAssistant'; // ✅ Voice Assistant import
 
 const Home = () => (
   <motion.div
@@ -25,15 +25,17 @@ const Home = () => (
     <Hero />
     <WhySmooth />
     <StackedCards />
-    <About />
-    <Skills />
-    <Projects />
-    <Education />
-    <Experience />
-    <Testimonials />
-    <Contact />
 
-    {/* ✅ Call Button for Testing */}
+    {/* ✅ Section IDs for voice navigation */}
+    <section id="about"><About /></section>
+    <section id="skills"><Skills /></section>
+    <section id="projects"><Projects /></section>
+    <section id="education"><Education /></section>
+    <section id="experience"><Experience /></section>
+    <section id="testimonials"><Testimonials /></section>
+    <section id="contact"><Contact /></section>
+
+    {/* Call Button */}
     <div className="text-center my-10">
       <Link to="/video-customer">
         <button className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
@@ -41,6 +43,9 @@ const Home = () => (
         </button>
       </Link>
     </div>
+
+    {/* ✅ Voice Assistant Active */}
+    <VoiceAssistant />
   </motion.div>
 );
 
@@ -65,9 +70,7 @@ const App = () => {
         }
 
         requestAnimationFrame(raf);
-        return () => {
-          lenis.destroy();
-        };
+        return () => lenis.destroy();
       } catch (error) {
         console.warn('Smooth scroll not initialized:', error);
       }
@@ -82,8 +85,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminPanel />} />
-
-          {/* ✅ Video Call Routes */}
           <Route path="/video-customer" element={<VideoRoom role="customer" />} />
           <Route path="/video-admin" element={<VideoRoom role="admin" />} />
         </Routes>
