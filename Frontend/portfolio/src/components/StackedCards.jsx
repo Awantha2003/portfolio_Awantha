@@ -87,30 +87,42 @@ const cards = [
   }
 ];
 
-// Feature highlights for Section 2
+
+
+// Feature highlights fr Section 2
+
 const features = [
   {
-    title: "Immersive Experience",
-    description: "Guides users through your content like a well-directed film.",
+    title: "Web & Software Development",
+    description: "Builds powerful, responsive web applications and systems using modern stacks.",
     icon: <Sparkles className="w-10 h-10 text-blue-400" strokeWidth={1.5} />,
     color: 'from-blue-500/30 to-indigo-600/30',
     imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
   },
   {
-    title: "Controlled Pacing",
-    description: "Craft moments and control the scroll speed effortlessly.",
+    title: "UI/UX & Figma Projects",
+    description: "Designs modern, user-friendly interfaces with pixel-perfect Figma mockups and prototypes. Creates seamless design flows with a focus on accessibility and creativity.",
     icon: <MousePointer className="w-10 h-10 text-red-400" strokeWidth={1.5} />,
     color: 'from-red-500/30 to-rose-600/30',
     imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
   },
   {
-    title: "Performance Optimized",
-    description: "Smooth scrolling without sacrificing performance.",
+    title: "Freelance Platforms",
+    description: "Trusted seller on Fiverr, delivering digital services with consistency.",
     icon: <Zap className="w-10 h-10 text-yellow-400" strokeWidth={1.5} />,
     color: 'from-yellow-500/30 to-amber-600/30',
     imageUrl: "https://images.unsplash.com/photo-1507238691740-9038a40d22db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+  },
+  {
+    title: "Creative Design Services",
+    description: "Designs stunning logos, posters, CVs, and social media content that stand out.",
+    icon: <Palette className="w-10 h-10 text-pink-400" strokeWidth={1.5} />, // Make sure Palette icon is imported
+    color: 'from-pink-500/30 to-fuchsia-600/30',
+    imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
   }
 ];
+
+
 
 // GeometricSVG, Particle, Card, and FeatureCard components remain unchanged
 const GeometricSVG = ({ color, isActive }) => {
@@ -722,7 +734,7 @@ const StackedCards = () => {
             viewport={{ once: true, amount: 0.3 }}
             className="text-4xl md:text-5xl font-bold mb-12 text-center bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent"
           >
-            Why Use Smooth Scroll?
+            Services Offered by Awantha Imesh
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, i) => (

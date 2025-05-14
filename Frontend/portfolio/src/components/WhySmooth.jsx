@@ -442,7 +442,7 @@ const WhySmooth = () => {
               <HighlightText>It's not performant.</HighlightText>
             </p>
             <p>
-              And historically, those were all true. But we like to imagine things as they could be, then build them. So, why should you use smooth scroll?
+              And historically, those were all true. But we like to imagine things as they could be, then build them. So,  should you use smooth scroll?
             </p>
             <p>
               Because when done right, it creates an <HighlightText>immersive experience</HighlightText> that guides users through your content like a well-directed film.

@@ -20,20 +20,21 @@ const VoiceAssistant = () => {
     recognition.maxAlternatives = 1;
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript.toLowerCase();
-      console.log("Voice Input:", transcript);
+      const transcript = event.results[0][0].transcript.toLowerCase().trim();
+      console.log("🎙 Voice Input:", transcript);
       handleCommand(transcript);
     };
 
     recognition.onend = () => {
+      console.log("🎤 Recognition ended");
       setListening(false);
-      setMessage("");
     };
 
-    recognition.onerror = (err) => {
-      console.error("Speech error:", err);
+    recognition.onerror = (event) => {
+      console.error("Speech error:", event.error);
       setListening(false);
-      setMessage("❌ Error occurred");
+      speak(`Speech recognition error: ${event.error}`);
+      setMessage(`❌ Speech error: ${event.error}`);
     };
 
     recognitionRef.current = recognition;
@@ -47,44 +48,54 @@ const VoiceAssistant = () => {
   };
 
   const handleCommand = (text) => {
+    console.log("⚡ Handling command:", text);
+
     const scrollTo = (id, msg) => {
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
         speak(msg);
-        setMessage(msg);
+        setMessage(` ${msg}`);
       } else {
         speak(`I couldn't find the ${id} section.`);
-        setMessage(`❌ Section "${id}" not found`);
+        setMessage(` Section "${id}" not found`);
       }
     };
 
-    if (text.includes("scroll down") || text.includes("පහළට") || text.includes("கீழே")) {
-      window.scrollBy({ top: 500, behavior: "smooth" });
-      speak("Scrolling down");
-      setMessage("⬇️ Scrolling down...");
-    } else if (text.includes("scroll up") || text.includes("ඉහළට") || text.includes("மேலே")) {
-      window.scrollBy({ top: -500, behavior: "smooth" });
-      speak("Scrolling up");
-      setMessage("⬆️ Scrolling up...");
-    } else if (text.includes("contact") || text.includes("අමතන්න") || text.includes("தொடர்பு")) {
-      scrollTo("contact", "Opening contact section");
-    } else if (text.includes("about") || text.includes("ඔබ") || text.includes("உங்களைப் பற்றி")) {
-      scrollTo("about", "Opening about section");
-    } else if (text.includes("skills") || text.includes("කාර්යශීලතාව") || text.includes("திறன்கள்")) {
-      scrollTo("skills", "Here are my skills");
-    } else if (text.includes("projects") || text.includes("ප්‍රොජෙක්ට්ස්") || text.includes("திட்டங்கள்")) {
-      scrollTo("projects", "Opening projects");
-    } else if (text.includes("experience") || text.includes("අත්දැකීම්") || text.includes("அனுபவம்")) {
-      scrollTo("experience", "Showing my experience");
+    const commandMap = [
+      { pattern: /(scroll down|පහළට|கீழே)/i, action: () => {
+          window.scrollBy({ top: 500, behavior: "smooth" });
+          speak("Scrolling down");
+          setMessage("⬇️ Scrolling down...");
+      }},
+      { pattern: /(scroll up|ඉහළට|மேலே)/i, action: () => {
+          window.scrollBy({ top: -500, behavior: "smooth" });
+          speak("Scrolling up");
+          setMessage("⬆️ Scrolling up...");
+      }},
+      { pattern: /(contact|අමතන්න|தொடர்பு)/i, action: () => scrollTo("contact", "Opening contact section") },
+      { pattern: /(about|ඔබ|உங்களைப் பற்றி)/i, action: () => scrollTo("about", "Opening about section") },
+      { pattern: /(skills|කාර්යශීලතාව|திறன்கள்)/i, action: () => scrollTo("skills", "Opening  skills") },
+      { pattern: /(projects|ප්‍රොජෙක්ට්ස්|திட்டங்கள்)/i, action: () => scrollTo("projects", "Opening projects") },
+      { pattern: /(experience|අත්දැකීම්|அனுபவம்)/i, action: () => scrollTo("experience", "Showing  experience") },
+    ];
+
+    const matched = commandMap.find((cmd) => cmd.pattern.test(text));
+
+    if (matched) {
+      matched.action();
     } else {
-      speak("Sorry, I didn't understand.");
-      setMessage("🤷 Sorry, I didn't understand.");
+      speak("Sorry, I didn't understand. You can say things like 'about', 'contact' or 'projects'.");
+      setMessage(`🤷 Sorry, I didn't understand: "${text}"`);
     }
   };
 
   const startListening = () => {
-    if (recognitionRef.current && !listening) {
+    if (recognitionRef.current) {
+      if (listening) {
+        recognitionRef.current.abort();
+        console.log("⛔ Restarting recognition");
+      }
       setListening(true);
       speak("I'm listening. Please say a section like about, contact or projects.");
       setMessage("🎤 I'm listening…");
