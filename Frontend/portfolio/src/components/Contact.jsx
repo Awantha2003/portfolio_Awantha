@@ -117,8 +117,8 @@ const Contact = () => {
               <ContactInfoItem
                 icon={<GithubIcon size={20} className="text-blue-400" />}
                 title="GitHub"
-                value="@johndoe"
-                href="https://github.com/johndoe"
+                value="@Awantha2003"
+                href="https://github.com/Awantha2003"
               />
             </div>
 
